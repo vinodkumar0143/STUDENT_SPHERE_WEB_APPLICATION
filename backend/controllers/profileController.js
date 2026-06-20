@@ -38,7 +38,7 @@ const createOrUpdateProfile = async (req, res) => {
         // Dynamic file resolving overriding original if user actively uploaded this session
         if (req.file) {
             // Serve securely from local API hosted uploads directory 
-            profileFields.profileImage = `http://localhost:5000/uploads/${req.file.filename}`;
+            profileFields.profileImage = `https://student-sphere-backend-46o4.onrender.com/uploads/${req.file.filename}`;
         }
 
         // Check if a profile already exists strictly tied to this specific user ID

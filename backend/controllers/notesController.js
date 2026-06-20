@@ -14,7 +14,7 @@ const createNote = async (req, res) => {
         // Connect physical server file path explicitly if explicitly attached
         let pdfLink = '';
         if (req.file) {
-            pdfLink = `http://localhost:5000/uploads/${req.file.filename}`;
+            pdfLink = `https://student-sphere-backend-46o4.onrender.com/uploads/${req.file.filename}`;
         }
 
         // Securely insert the note mapped strictly to the token-authenticated active user

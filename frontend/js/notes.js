@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Initiate authenticated POST operation mapped specifically to the backend
-            const response = await fetch('http://localhost:5000/api/notes', {
+            const response = await fetch('https://student-sphere-backend-46o4.onrender.com/api/notes', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}` // JWT Secure Transmission (Browser handles Content-Type boundaries natively)
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. FETCH ISOLATED NOTES
     const fetchNotes = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/notes', {
+            const response = await fetch('https://student-sphere-backend-46o4.onrender.com/api/notes', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (semester) queryParams.append('semester', semester);
 
         try {
-            const response = await fetch(`http://localhost:5000/api/notes/filter?${queryParams.toString()}`, {
+            const response = await fetch(`https://student-sphere-backend-46o4.onrender.com/api/notes/filter?${queryParams.toString()}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5.5 DELETE NOTE FUNCTIONALITY
     const deleteNoteEvent = async (noteId, cardElement) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/notes/${noteId}`, {
+            const response = await fetch(`https://student-sphere-backend-46o4.onrender.com/api/notes/${noteId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Sync user name from backend
-            fetch('http://localhost:5000/api/auth/me', {
+            fetch('https://student-sphere-backend-46o4.onrender.com/api/auth/me', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Send POST request to backend API
-            const response = await fetch('http://localhost:5000/api/auth/register', {
+            const response = await fetch('https://student-sphere-backend-46o4.onrender.com/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Send POST request to backend API
-            const response = await fetch('http://localhost:5000/api/auth/login', {
+            const response = await fetch('https://student-sphere-backend-46o4.onrender.com/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('http://localhost:5000/api/auth/forgot-password', {
+            const response = await fetch('https://student-sphere-backend-46o4.onrender.com/api/auth/forgot-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/api/auth/reset-password/${token}`, {
+            const response = await fetch(`https://student-sphere-backend-46o4.onrender.com/api/auth/reset-password/${token}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: newPassword }),

@@ -2,7 +2,7 @@
 
 // 1. AUTH PROTECTION
 const token = localStorage.getItem('token');
-const API_BASE_URL = 'http://localhost:5000/api/posts';
+const API_BASE_URL = 'https://student-sphere-backend-46o4.onrender.com/api/posts';
 
 function checkAuth() {
     if (!token) {

@@ -2,7 +2,7 @@
 
 // 1. AUTH PROTECTION
 const token = localStorage.getItem('token');
-const API_BASE_URL = 'http://localhost:5000/api/profile';
+const API_BASE_URL = 'https://student-sphere-backend-46o4.onrender.com/api/profile';
 
 function checkAuth() {
     if (!token) {
@@ -185,7 +185,7 @@ async function saveProfile(e) {
         }
     } catch (err) {
         console.error('Profile save error:', err);
-        showAlert('❌ Cannot reach server. Is backend running on port 5000?', true);
+        showAlert('❌ Cannot reach server. Ensure the backend is running.', true);
         saveProfileBtn.disabled = false;
         saveProfileBtn.textContent = 'Save & Update Profile';
     }
