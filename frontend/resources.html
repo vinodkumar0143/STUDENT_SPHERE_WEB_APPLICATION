@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Sphere - Resource Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body class="dashboard-page">
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="Student Sphere Logo" class="logo-img" loading="lazy">
+                <span class="logo-brand-text">Student Sphere</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="community.html">Community</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="dashboard-wrapper">
+        <a href="dashboard.html" class="back-btn" style="color: #94a3b8; text-decoration: none; margin-bottom: 2rem; display: inline-block;">← Back to Dashboard</a>
+
+        <div class="dashboard-header" style="animation: slideDownFade 0.5s ease-out forwards;">
+            <h1 style="font-size: 3rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">🚀 Resource Center</h1>
+            <p style="font-size: 1.2rem; color: #64748b;">Curated tools and platforms to accelerate your career growth.</p>
+        </div>
+
+        <div class="resource-grid" style="margin-top: 3rem; animation: slideUpFade 0.6s ease-out forwards;">
+            <!-- Dev Challenges -->
+            <a href="https://devchallenges.io" target="_blank" class="resource-block">
+                <h4>🏆 Dev Challenges</h4>
+                <p>High-quality frontend, backend, and fullstack projects with real-world designs.</p>
+                <div class="resource-link">Practice Skills →</div>
+            </a>
+
+            <!-- Open Source -->
+            <a href="https://github.com/collections/pro-tips-for-developers" target="_blank" class="resource-block">
+                <h4>📦 Open Source</h4>
+                <p>Contribute to world-class repositories and build your GitHub reputation.</p>
+                <div class="resource-link">Start Contributing →</div>
+            </a>
+
+            <!-- Resume Center -->
+            <a href="https://www.overleaf.com/latex/templates/tagged/cv" target="_blank" class="resource-block">
+                <h4>📄 Resume Center</h4>
+                <p>Professional LaTeX and modern resume templates that bypass ATS effortlessly.</p>
+                <div class="resource-link">Build Resume →</div>
+            </a>
+
+            <!-- Coding Arena -->
+            <a href="https://leetcode.com" target="_blank" class="resource-block">
+                <h4>💻 Coding Arena</h4>
+                <p>Master Data Structures and Algorithms with over 2000+ technical questions.</p>
+                <div class="resource-link">Solve Problems →</div>
+            </a>
+
+            <!-- Dev Blogs -->
+            <a href="https://medium.com" target="_blank" class="resource-block">
+                <h4>📖 Dev Blogs</h4>
+                <p>Stay updated with latest tech trends and engineering blogs from top companies.</p>
+                <div class="resource-link">Read More →</div>
+            </a>
+
+            <!-- Learning Paths -->
+            <a href="https://roadmap.sh" target="_blank" class="resource-block">
+                <h4>🗺️ Learning Paths</h4>
+                <p>Clear roadmaps for every developer role, from Frontend to DevOps.</p>
+                <div class="resource-link">View Paths →</div>
+            </a>
+        </div>
+    </main>
+
+    <script src="js/theme.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

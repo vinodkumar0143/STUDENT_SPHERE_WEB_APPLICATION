@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Sphere - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body class="dashboard-page">
+    <header>
+        <nav>
+            <a href="dashboard.html" class="logo">
+                <img src="assets/logo.png" alt="Student Sphere Logo" class="logo-img" loading="lazy">
+                <span class="logo-brand-text">Student Sphere</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><button id="logout-btn" class="btn btn-logout btn-small">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="dashboard-wrapper">
+        <div class="dashboard-header">
+            <h1 id="welcome-message">Welcome, Student</h1>
+            <p>What would you like to explore today?</p>
+        </div>
+
+        <div class="card-grid">
+            <a href="notes.html" class="dashboard-card">
+                <h3>📚 Notes</h3>
+                <p>Access your study materials and securely share curated notes with peers across the globe.</p>
+            </a>
+            <a href="opportunities.html" class="dashboard-card">
+                <h3>💼 Opportunities</h3>
+                <p>Find highly-vetted internships, verified jobs, and incredible career-building events.</p>
+            </a>
+            <a href="community.html" class="dashboard-card">
+                <h3>💬 Community</h3>
+                <p>Join the open forums and connect instantly with thousands of other students.</p>
+            </a>
+            <a href="profile.html" class="dashboard-card">
+                <h3>👤 Profile</h3>
+                <p>Manage your secure account settings, metrics, and personal details.</p>
+            </a>
+            
+            <!-- Live Study Meeting Card -->
+            <div id="meeting-card" class="dashboard-card">
+                <h3>🎥 Live Study Meeting</h3>
+                <p>Start a secure Jitsi meet instantly to collaborate and study with peers.</p>
+                <div class="meeting-controls">
+                    <input type="text" id="custom-room-input" placeholder="Custom Room (Optional)">
+                    <button id="start-meeting-btn" class="btn btn-primary">Start Study Meeting</button>
+                </div>
+            </div>
+            <a href="resources.html" class="dashboard-card">
+                <h3>🚀 Resource Center</h3>
+                <p>Curated tools and platforms to accelerate your career growth.</p>
+            </a>
+        </div>
+    </main>
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/meeting.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

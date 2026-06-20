@@ -1,0 +1,721 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opportunities Hub - Student Sphere</title>
+    <meta name="description" content="Explore top hackathons, internships, and workshops for students on Student Sphere.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ═══════════════════════════════════════════════════════════════
+           OPPORTUNITIES HUB — PREMIUM REDESIGN
+        ═══════════════════════════════════════════════════════════════ */
+
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --neon-blue: #00f2fe;
+            --neon-purple: #8b5cf6;
+            --neon-pink: #f472b6;
+        }
+
+        .opp-page {
+            background: #050816;
+            color: #e2e8f0;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Animated Mesh Background */
+        .opp-page::before {
+            content: '';
+            position: fixed;
+            top: -10%; left: -10%;
+            width: 120%; height: 120%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 60%);
+            filter: blur(80px);
+            z-index: -1;
+            animation: meshFlow 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshFlow {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.1) translate(-2%, -2%); }
+        }
+
+        /* ---- Hero Banner ---- */
+        .opp-hero {
+            padding: 6rem 2rem 5rem;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(13, 18, 38, 0.6) 0%, transparent 100%);
+            border-bottom: 1px solid var(--glass-border);
+            position: relative;
+        }
+
+        .opp-hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.15);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #818cf8;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease backwards;
+        }
+
+        .opp-hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 950;
+            margin: 0 0 1.2rem;
+            letter-spacing: -3px;
+            background: linear-gradient(135deg, #fff 30%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        .opp-hero p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 650px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .opp-hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.6s backwards;
+        }
+
+        .btn-hero {
+            padding: 1.25rem 3rem;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            color: #fff;
+            position: relative;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 240px;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+        }
+
+        /* ---- Stats Bar ---- */
+        .opp-stats {
+            display: flex;
+            justify-content: center;
+            gap: 5rem;
+            background: rgba(13, 18, 38, 0.4);
+            backdrop-filter: blur(20px);
+            padding: 1.8rem 2rem;
+            border-bottom: 1px solid var(--glass-border);
+            flex-wrap: wrap;
+        }
+
+        .stat-item { text-align: center; }
+        .stat-num {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        /* ---- Main Layout ---- */
+        .opp-main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem 6rem;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .section-icon {
+            width: 56px; height: 56px;
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .icon-hack { background: linear-gradient(135deg, #00f2fe, #4facfe); }
+        .icon-intern { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .icon-workshop { background: linear-gradient(135deg, #6366f1, #a5b4fc); }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            color: #fff;
+            margin: 0;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+            padding: 1rem 0;
+        }
+
+        .opp-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(24px);
+            border: 2px solid rgba(56, 189, 248, 0.3) !important;
+            border-radius: 36px;
+            padding: 2.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3), 0 0 15px rgba(56, 189, 248, 0.1) !important;
+        }
+
+        .opp-card:hover {
+            transform: translateY(-15px) scale(1.03) !important;
+            background: #0d1226 !important;
+            border: 3px solid #38bdf8 !important; /* Stable Shiny Blue border */
+            box-shadow: 
+                0 40px 100px rgba(0, 0, 0, 0.9),
+                0 0 60px rgba(56, 189, 248, 0.6),
+                0 0 120px rgba(56, 189, 248, 0.3),
+                inset 0 0 30px rgba(56, 189, 248, 0.15) !important;
+        }
+
+        .platform-card .card-title {
+            color: #f472b6 !important; /* Deep Shiny Pink */
+            text-shadow: 0 0 10px rgba(244, 114, 182, 0.4) !important;
+            font-size: 1.8rem !important;
+            letter-spacing: -0.5px !important;
+        }
+
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 950;
+            color: #fff;
+            line-height: 1.25;
+            letter-spacing: -1px;
+        }
+
+        .card-badge {
+            display: inline-flex;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--neon-blue);
+            padding: 0.6rem 1.4rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .card-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            font-size: 1.05rem;
+            color: #94a3b8;
+        }
+
+        .card-desc {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .card-highlight {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #fff;
+            padding: 1.4rem;
+            border-radius: 20px;
+            font-size: 1.15rem;
+            font-weight: 950;
+            text-align: center;
+        }
+
+        .btn-apply {
+            width: 100%;
+            background: #fff;
+            color: #050816;
+            padding: 1.35rem;
+            border-radius: 22px;
+            font-weight: 950;
+            font-size: 1.15rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            transition: all 0.5s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-apply:hover {
+            background: var(--neon-blue);
+            color: #000;
+            transform: translateY(-5px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .back-btn {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #818cf8 !important; /* Brighter default color */
+            background: rgba(129, 140, 248, 0.08); /* Faint indigo glow base */
+            border: 1px solid rgba(129, 140, 248, 0.2);
+            font-weight: 700;
+            text-decoration: none !important;
+            font-size: 0.95rem;
+        }
+
+        .back-btn:hover {
+            color: #fff !important;
+            background: rgba(129, 140, 248, 0.25);
+            border-color: #818cf8;
+            transform: translateX(-8px) scale(1.05);
+            box-shadow: 0 0 25px rgba(129, 140, 248, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .opp-hero h1 { font-size: 2.5rem; }
+            .opp-stats { gap: 2rem; justify-content: space-around; }
+            .cards-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+    <link rel='stylesheet' href='css/chatbot.css'>
+</head>
+<body class="opp-page">
+
+    <!-- Navbar -->
+    <header>
+        <style>
+            nav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1.5rem 2rem;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            .nav-links { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+            .nav-links a { text-decoration: none; color: #94a3b8; font-weight: 600; transition: 0.3s; }
+            .nav-links a:hover { color: #fff; }
+        </style>
+        <nav>
+            <a href="index.html" class="logo" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+                <img src="assets/logo.png" alt="Student Sphere Logo" style="width:48px;max-width:48px;height:auto;object-fit:contain;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.35);" loading="lazy">
+                <span style="font-size:1.45rem;font-weight:800;color:#fff;letter-spacing:-0.5px;white-space:nowrap;">Student Sphere</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="community.html">Community</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><button id="logoutBtn" class="btn btn-logout btn-small">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="opp-hero">
+        <div class="opp-hero-label">🚀 Opportunities Hub</div>
+        <h1>Launch Your Career Here</h1>
+        <p>Hand-picked hackathons, internships, and workshops to help you grow, learn, and land your dream role.</p>        <div class="opp-hero-actions">
+            <a href="#hackathons" class="btn-hero"><span>🏆</span> Hackathons</a>
+            <a href="#internships" class="btn-hero"><span>💼</span> Internships</a>
+            <a href="#workshops" class="btn-hero"><span>📚</span> Workshops</a>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="opp-stats">
+        <div class="stat-item">
+            <div class="stat-num">12+</div>
+            <div class="stat-label">Opportunities</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">₹5L+</div>
+            <div class="stat-label">Prize Pool</div>
+        </div>
+    </div>
+
+    <main class="opp-main">
+        <div id="mainOpportunities">
+            <a href="dashboard.html" class="back-btn" style="color: #94a3b8; text-decoration: none; margin-bottom: 2rem; display: inline-block;">← Back to Dashboard</a>
+
+            <!-- SECTION A: HACKATHONS -->
+            <section id="hackathons">
+                <div class="section-header">
+                    <div class="section-icon icon-hack">🏆</div>
+                    <div>
+                        <h2>Hackathons</h2>
+                        <p>Compete, build, and win incredible prizes</p>
+                    </div>
+                </div>
+
+                <div class="cards-grid">
+                    <!-- Explore Hackathons Card -->
+                    <div class="opp-card" id="exploreHackathonsBtn" style="cursor: pointer; border: 2px solid var(--neon-pink); background: rgba(244, 114, 182, 0.05);">
+                        <p class="card-title" style="color: var(--neon-pink);">Explore Global Hackathons</p>
+                        <span class="card-badge" style="background: var(--neon-pink); color: #fff;">TOP COMPETITIONS</span>
+                        <p class="card-desc">Compete with the world's best developers. Find high-stakes hackathons, ideathons, and innovation challenges.</p>
+                        <div style="margin-top: auto; padding-top: 1rem; color: var(--neon-pink); font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+                            View Hackathon Hub <span>→</span>
+                        </div>
+                    </div>
+
+                    <div class="opp-card">
+                        <p class="card-title">Smart India Hackathon 2025</p>
+                        <span class="card-badge">🔥 Popular</span>
+                        <div class="card-meta">
+                            <div class="card-meta-row"><span class="meta-icon">🏛️</span> <span>Ministry of Ed. India</span></div>
+                            <div class="card-meta-row"><span class="meta-icon">📅</span> <span>Aug 2025 · 36h</span></div>
+                        </div>
+                        <p class="card-desc">India's biggest inter-college hackathon. Solve real-world govt problems.</p>
+                        <span class="card-highlight">🏆 Prize: ₹1,0,000</span>
+                        <a href="https://sih.gov.in" target="_blank" class="btn-apply">Apply Now →</a>
+                    </div>
+                </div>
+            <hr style="opacity: 0.1; margin: 4rem 0;" />
+
+            <!-- SECTION B: INTERNSHIPS -->
+            <section id="internships">
+                <div class="section-header">
+                    <div class="section-icon icon-intern">💼</div>
+                    <div>
+                        <h2>Internships</h2>
+                        <p>Gain real-world experience at top companies</p>
+                    </div>
+                </div>
+
+                <div class="cards-grid">
+                    <!-- Explore Card -->
+                    <div class="opp-card" id="exploreInternshipsBtn" style="cursor: pointer; border: 2px solid var(--neon-purple); background: rgba(139, 92, 246, 0.05);">
+                        <p class="card-title" style="color: var(--neon-purple);">Explore Internships</p>
+                        <span class="card-badge" style="background: var(--neon-purple); color: #fff;">TOP PLATFORMS</span>
+                        <p class="card-desc">Discover top internships from world-class platforms like Internshala, LinkedIn, and more.</p>
+                        <div style="margin-top: auto; padding-top: 1rem; color: var(--neon-purple); font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+                            View Platforms <span>→</span>
+                        </div>
+                    </div>
+
+                    <div class="opp-card">
+                        <p class="card-title">Software Engineer Intern</p>
+                        <span class="card-badge">🏠 Remote</span>
+                        <div class="card-meta">
+                            <div class="card-meta-row"><span class="meta-icon">🏢</span> <span>Microsoft India</span></div>
+                        </div>
+                        <p class="card-desc">Work on Azure features with Microsoft engineers.</p>
+                        <span class="card-highlight">💰 Stipend: ₹80,000/mo</span>
+                        <a href="https://careers.microsoft.com" target="_blank" class="btn-apply">Apply Now →</a>
+                    </div>
+                </div>
+            </section>
+
+            <hr style="opacity: 0.1; margin: 4rem 0;" />
+
+            <!-- SECTION C: WORKSHOPS -->
+            <section id="workshops">
+                <div class="section-header">
+                    <div class="section-icon icon-workshop">📚</div>
+                    <div>
+                        <h2>Workshops</h2>
+                        <p>Level up your skills with expert sessions</p>
+                    </div>
+                </div>
+
+                <div class="cards-grid">
+                    <!-- Explore Workshops Card -->
+                    <div class="opp-card" id="exploreWorkshopsBtn" style="cursor: pointer; border: 2px solid var(--neon-blue); background: rgba(0, 242, 254, 0.05);">
+                        <p class="card-title" style="color: var(--neon-blue);">Explore Skill Workshops</p>
+                        <span class="card-badge" style="background: var(--neon-blue); color: #000;">VERIFIED LEARNING</span>
+                        <p class="card-desc">Master the latest tech stacks from world-class instructors. Find bootcamps, masterclasses, and hands-on skill labs.</p>
+                        <div style="margin-top: auto; padding-top: 1rem; color: var(--neon-blue); font-weight: 800; display: flex; align-items: center; gap: 0.5rem;">
+                            View Learning Hub <span>→</span>
+                        </div>
+                    </div>
+
+                    <div class="opp-card">
+                        <p class="card-title">Full Stack Web Dev Bootcamp</p>
+                        <span class="card-badge">Live Online</span>
+                        <p class="card-desc">Build 2 real projects in 3 days. Certificate included.</p>
+                        <span class="card-highlight">🎟️ FREE Registration</span>
+                        <a href="https://codehelp.in" target="_blank" class="btn-apply">Register →</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- HACKATHON PLATFORMS SECTION (HIDDEN) -->
+        <div id="hackathonPlatforms" style="display: none;">
+            <a href="#" id="backToHubBtnHack" class="back-btn" style="color: #94a3b8; text-decoration: none; margin-bottom: 2rem; display: inline-block;">← Back to Hub</a>
+            
+            <div class="section-header">
+                <div class="section-icon icon-hack" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">🏆</div>
+                <div>
+                    <h2 style="font-size: 2.5rem;">Hackathon Platforms</h2>
+                    <p>Find your next challenge on these world-class platforms</p>
+                </div>
+            </div>
+
+            <div class="cards-grid" style="margin-top: 3rem;">
+                <!-- Devpost -->
+                <div class="opp-card platform-card" data-url="https://devpost.com" style="cursor: pointer;">
+                    <p class="card-title">Devpost</p>
+                    <p class="card-desc">The home for hackathons. Explore thousands of online and in-person hackathons worldwide.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Devpost</button>
+                </div>
+
+                <!-- Unstop -->
+                <div class="opp-card platform-card" data-url="https://unstop.com/hackathons" style="cursor: pointer;">
+                    <p class="card-title">Unstop</p>
+                    <p class="card-desc">Leading platform for student competitions, hackathons, and corporate challenges in India.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Unstop</button>
+                </div>
+
+                <!-- HackerEarth -->
+                <div class="opp-card platform-card" data-url="https://www.hackerearth.com/challenges/hackathon" style="cursor: pointer;">
+                    <p class="card-title">HackerEarth</p>
+                    <p class="card-desc">Participate in corporate hackathons and win cash prizes, jobs, and networking opportunities.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit HackerEarth</button>
+                </div>
+
+                <!-- Devfolio -->
+                <div class="opp-card platform-card" data-url="https://devfolio.co/hackathons" style="cursor: pointer;">
+                    <p class="card-title">Devfolio</p>
+                    <p class="card-desc">India's largest hackathon community with exclusive access to premium university events.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Devfolio</button>
+                </div>
+
+                <!-- MLH -->
+                <div class="opp-card platform-card" data-url="https://mlh.io/seasons/2024/events" style="cursor: pointer;">
+                    <p class="card-title">Major League Hacking</p>
+                    <p class="card-desc">Official student hackathon league. Find thousands of student-focused events globally.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit MLH</button>
+                </div>
+
+                <!-- Hack2skill -->
+                <div class="opp-card platform-card" data-url="https://hack2skill.com" style="cursor: pointer;">
+                    <p class="card-title">Hack2skill</p>
+                    <p class="card-desc">Connect with mentors and companies through corporate innovation challenges and hackathons.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Hack2skill</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- WORKSHOP PLATFORMS SECTION (HIDDEN) -->
+        <div id="workshopPlatforms" style="display: none;">
+            <a href="#" id="backToHubBtnWorkshop" class="back-btn" style="color: #94a3b8; text-decoration: none; margin-bottom: 2rem; display: inline-block;">← Back to Hub</a>
+            
+            <div class="section-header">
+                <div class="section-icon icon-workshop" style="background: linear-gradient(135deg, #fb7185, #f472b6);">🎓</div>
+                <div>
+                    <h2 style="font-size: 2.5rem;">Learning Platforms</h2>
+                    <p>Access premium workshops and masterclasses from top sources</p>
+                </div>
+            </div>
+
+            <div class="cards-grid" style="margin-top: 3rem;">
+                <!-- Udemy -->
+                <div class="opp-card platform-card" data-url="https://www.udemy.com" style="cursor: pointer;">
+                    <p class="card-title">Udemy</p>
+                    <p class="card-desc">Over 213,000 online video courses. Find thousands of student-focused skill workshops.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Udemy</button>
+                </div>
+
+                <!-- Coursera -->
+                <div class="opp-card platform-card" data-url="https://www.coursera.org" style="cursor: pointer;">
+                    <p class="card-title">Coursera</p>
+                    <p class="card-desc">Professional certificates and workshops from Google, IBM, and world-class universities.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Coursera</button>
+                </div>
+
+                <!-- GeeksforGeeks -->
+                <div class="opp-card platform-card" data-url="https://www.geeksforgeeks.org/courses" style="cursor: pointer;">
+                    <p class="card-title">GeeksforGeeks</p>
+                    <p class="card-desc">Specially curated live bootcamps and workshops for placement preparation and coding.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit GFG Hub</button>
+                </div>
+
+                <!-- Scaler -->
+                <div class="opp-card platform-card" data-url="https://www.scaler.com/events" style="cursor: pointer;">
+                    <p class="card-title">Scaler Academy</p>
+                    <p class="card-desc">High-intensity free masterclasses on System Design, Data Science, and Machine Learning.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Scaler</button>
+                </div>
+
+                <!-- Great Learning -->
+                <div class="opp-card platform-card" data-url="https://www.mygreatlearning.com/academy" style="cursor: pointer;">
+                    <p class="card-title">Great Learning</p>
+                    <p class="card-desc">Free workshops on Data Science, AI, and Software Engineering with free сертификатов.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Academy</button>
+                </div>
+
+                <!-- Coding Ninjas -->
+                <div class="opp-card platform-card" data-url="https://www.codingninjas.com/events" style="cursor: pointer;">
+                    <p class="card-title">Coding Ninjas</p>
+                    <p class="card-desc">Attend live coding webinars and hands-on workshops with industry experts.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Events</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- INTERNSHIP PLATFORMS SECTION (HIDDEN) -->
+        <div id="internshipPlatforms" style="display: none;">
+            <a href="#" id="backToHubBtn" class="back-btn" style="color: #94a3b8; text-decoration: none; margin-bottom: 2rem; display: inline-block;">← Back to Hub</a>
+            
+            <div class="section-header">
+                <div class="section-icon icon-intern" style="background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));">🔍</div>
+                <div>
+                    <h2 style="font-size: 2.5rem;">Internship Platforms</h2>
+                    <p>Find your next opportunity on these verified platforms</p>
+                </div>
+            </div>
+
+            <div class="cards-grid" style="margin-top: 3rem;">
+                <!-- Internshala -->
+                <div class="opp-card platform-card" data-url="https://internshala.com" style="cursor: pointer;">
+                    <p class="card-title">Internshala</p>
+                    <p class="card-desc">India's #1 internship and training platform with over 80,000 opportunities.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Internshala</button>
+                </div>
+
+                <!-- LinkedIn -->
+                <div class="opp-card platform-card" data-url="https://www.linkedin.com/jobs" style="cursor: pointer;">
+                    <p class="card-title">LinkedIn Jobs</p>
+                    <p class="card-desc">World's largest professional network. Find global internships and jobs.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit LinkedIn</button>
+                </div>
+
+                <!-- Naukri -->
+                <div class="opp-card platform-card" data-url="https://www.naukri.com" style="cursor: pointer;">
+                    <p class="card-title">Naukri</p>
+                    <p class="card-desc">India's leading job portal with a vast repository of entry-level roles.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Naukri</button>
+                </div>
+
+                <!-- Indeed -->
+                <div class="opp-card platform-card" data-url="https://www.indeed.com" style="cursor: pointer;">
+                    <p class="card-title">Indeed</p>
+                    <p class="card-desc">Search millions of jobs and internships worldwide in one place.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Indeed</button>
+                </div>
+
+                <!-- Glassdoor -->
+                <div class="opp-card platform-card" data-url="https://www.glassdoor.com" style="cursor: pointer;">
+                    <p class="card-title">Glassdoor</p>
+                    <p class="card-desc">Get inside insights on companies, salaries, and find top internships.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit Glassdoor</button>
+                </div>
+
+                <!-- LetsIntern -->
+                <div class="opp-card platform-card" data-url="https://www.letsintern.com" style="cursor: pointer;">
+                    <p class="card-title">LetsIntern</p>
+                    <p class="card-desc">Creative and professional internship portal for students in India.</p>
+                    <button class="btn-apply" style="margin-top: auto;">Visit LetsIntern</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // AUTH PROTECTION — redirect if not logged in
+        if (!localStorage.getItem('token')) {
+            window.location.href = 'login.html';
+        }
+
+        // LOGOUT handler
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        });
+
+        // Smooth scroll for hero anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const id = link.getAttribute('href');
+                if (id.length > 1) {
+                    const target = document.querySelector(id);
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+    </script>
+    <script src="js/theme.js"></script>
+    <script src="js/opportunities.js"></script>
+    <script src='js/chatbot.js'></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Sphere - Community</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/community.css">
+    <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body class="community-page">
+    <header>
+        <nav>
+            <a href="dashboard.html" class="logo">
+                <img src="assets/logo.png" alt="Student Sphere Logo" class="logo-img" loading="lazy">
+                <span class="logo-brand-text">Student Sphere</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="notes.html">Notes</a></li>
+                <li><a href="community.html">Community</a></li>
+                <li><button id="logoutBtn" class="btn btn-logout btn-small">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="community-wrapper">
+        <div class="community-header">
+            <h1>Community Forums</h1>
+            <p>Engage in discussions, ask questions, and share knowledge.</p>
+        </div>
+
+        <div id="alertContainer" class="alert hidden"></div>
+
+        <div class="card-outline create-post-container">
+            <h2>Start a Discussion</h2>
+            <form id="createPostForm" class="auth-form">
+                <div class="form-group">
+                    <label for="postTitle">Topic Title</label>
+                    <input type="text" id="postTitle" required placeholder="What is your discussion about?">
+                </div>
+                <div class="form-group">
+                    <label for="postDescription">Description</label>
+                    <textarea id="postDescription" rows="4" required placeholder="Provide more details to get better responses..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" id="postBtn">Post Discussion</button>
+            </form>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search discussions by title or description..." class="search-input">
+        </div>
+
+        <div class="posts-container" id="postsContainer">
+            <!-- Posts will be rendered here dynamically via JS -->
+        </div>
+    </main>
+    <script src="js/community.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

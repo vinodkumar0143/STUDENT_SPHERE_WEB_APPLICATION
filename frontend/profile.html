@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Student Sphere</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <style>
+        .section-title {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin: 1.5rem 0 1rem 0;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        #buildResumeBtn {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6, #6366f1) !important;
+            background-size: 200% auto !important;
+            color: #fff !important;
+            padding: 1.4rem 3rem !important;
+            font-size: 1.15rem !important;
+            font-weight: 900 !important;
+            letter-spacing: 0.5px !important;
+            border-radius: 18px !important;
+            border: none !important;
+            border-top: 2px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4) !important;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+            cursor: pointer !important;
+            width: 100% !important;
+            margin-top: 1rem !important;
+            animation: gradientFlow 4s linear infinite !important;
+        }
+        #buildResumeBtn:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 
+                0 20px 50px rgba(59, 130, 246, 0.6),
+                0 0 30px rgba(6, 182, 212, 0.4) !important;
+            filter: brightness(1.1);
+        }
+        #buildResumeBtn:active {
+            transform: translateY(2px) scale(0.98);
+        }
+        .form-row {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .form-col {
+            flex: 1;
+        }
+        .required-star {
+            color: #ef4444;
+        }
+        .image-upload-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        .img-preview-styled {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .file-input-styled {
+            background: none !important;
+            border: none !important;
+            padding: 0.5rem 0 !important;
+            width: auto !important;
+            box-shadow: none !important;
+        }
+        .skills-hint {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.6rem;
+            display: block;
+        }
+        .button-group-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            width: 100%;
+        }
+        .section-desc {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+    </style>
+    <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body class="profile-page">
+
+    <!-- Primary Navbar -->
+    <header>
+        <nav>
+            <a href="dashboard.html" class="logo">
+                <img src="assets/logo.png" alt="Student Sphere Logo" class="logo-img" loading="lazy">
+                <span class="logo-brand-text">Student Sphere</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="community.html">Community</a></li>
+                <li><a href="#" class="active">Profile</a></li>
+                <li><button id="logoutBtn" class="btn btn-logout btn-small">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="profile-container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <h2>My Digital Profile</h2>
+                <p>Build your identity, showcase your skills, and connect with the world.</p>
+            </div>
+
+            <div id="alertContainer" class="alert hidden"></div>
+
+            <form id="profileForm" class="auth-form mt-2">
+                
+                <h3 class="section-title">Academic &amp; Personal Details</h3>
+                <div class="form-group flex-row form-row">
+                    <div class="form-col">
+                        <label for="name">Full Name <span class="required-star">*</span></label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" placeholder="21" min="15" max="100">
+                    </div>
+                </div>
+
+                <div class="form-group flex-row form-row">
+                    <div class="form-col">
+                        <label for="college">College <span class="required-star">*</span></label>
+                        <input type="text" id="college" name="college" placeholder="Stanford University" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="branch">Branch <span class="required-star">*</span></label>
+                        <input type="text" id="branch" name="branch" placeholder="Computer Science" required>
+                    </div>
+                </div>
+
+                <h3 class="section-title">Professional &amp; Contact Info</h3>
+                <div class="form-group flex-row form-row">
+                    <div class="form-col">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+1 234 567 8900">
+                    </div>
+                    <div class="form-col">
+                        <label for="emailDisplay">Email Address</label>
+                        <input type="email" id="emailDisplay" placeholder="your@email.com">
+                    </div>
+                </div>
+
+                <div class="form-group flex-row form-row">
+                    <div class="form-col">
+                        <label for="linkedin">LinkedIn URL</label>
+                        <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/johndoe">
+                    </div>
+                    <div class="form-col">
+                        <label for="github">GitHub URL</label>
+                        <input type="url" id="github" name="github" placeholder="https://github.com/johndoe">
+                    </div>
+                </div>
+
+                <h3 class="section-title">Portfolio &amp; Identity</h3>
+                <div class="form-group">
+                    <label for="profileImage">Upload Profile Image (Local File)</label>
+                    <div class="image-upload-wrapper">
+                        <img id="imagePreview" src="https://via.placeholder.com/60?text=+" alt="Preview" class="img-preview-styled">
+                        <input type="file" id="profileImage" name="profileImage" accept="image/jpeg, image/png, image/jpg" class="file-input-styled">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="skills">Technical Skills</label>
+                    <input type="text" id="skills" name="skills" placeholder="JavaScript, Node.js, Next.js, Python">
+                    <small class="skills-hint">Separate skills with commas.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">About Me (Bio)</label>
+                    <textarea id="bio" name="bio" rows="4" placeholder="Passionate developer looking to build the future..."></textarea>
+                </div>
+
+                <h3 class="section-title">Additional Resume Information</h3>
+                <p class="section-desc">These fields are optional. Fill them only if you want them to appear in your ATS Resume.</p>
+
+                <div class="form-group">
+                    <label for="schooling">Schooling Details</label>
+                    <textarea id="schooling" name="schooling" rows="4" placeholder="School Name&#10;Board&#10;Percentage / GPA&#10;Year of Passing"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="intermediate">Intermediate / Diploma Details</label>
+                    <textarea id="intermediate" name="intermediate" rows="4" placeholder="College Name&#10;Stream&#10;Percentage / GPA&#10;Year of Passing"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="extraProjects">Additional Projects</label>
+                    <textarea id="extraProjects" name="extraProjects" rows="4" placeholder="Project Name&#10;Description&#10;Technologies Used"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Experiences / Internships</label>
+                    <textarea id="experience" name="experience" rows="4" placeholder="Company Name&#10;Role / Position&#10;Duration (e.g. Month Year - Month Year)&#10;Key Responsibilities &amp; Achievements"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="certifications">Certifications</label>
+                    <textarea id="certifications" name="certifications" rows="4" placeholder="Certification Name&#10;Organization&#10;Year"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="achievements">Achievements &amp; Awards</label>
+                    <textarea id="achievements" name="achievements" rows="4" placeholder="Project Expo Winner&#10;Hackathon Finalist&#10;Academic Awards&#10;Leadership Awards"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="extracurricular">Extra Curricular Activities</label>
+                    <textarea id="extracurricular" name="extracurricular" rows="4" placeholder="Club Activities&#10;Volunteer Work&#10;Student Leadership&#10;Events Organized"></textarea>
+                </div>
+
+                <div class="button-group-container">
+                    <button type="submit" id="saveProfileBtn">Save &amp; Update Profile</button>
+                    <button type="button" id="buildResumeBtn">Build ATS Friendly Resume</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/profile.js?v=9"></script>
+    <script src="js/resume.js?v=9"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

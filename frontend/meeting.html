@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Study Meeting - Student Sphere</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .meeting-page {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: #050816;
+            margin: 0;
+            overflow: hidden;
+        }
+        .meeting-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(10, 12, 30, 0.9);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .meeting-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .room-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        .back-btn {
+            color: #94a3b8;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .back-btn:hover {
+            color: #fff;
+        }
+        #meeting-container {
+            flex: 1;
+            width: 100%;
+            background: #000;
+        }
+    </style>
+</head>
+<body class="meeting-page">
+    <div class="meeting-header">
+        <h2>🎥 Live Study Session <span id="room-display" class="room-badge">...</span></h2>
+        <a href="dashboard.html" class="back-btn">← Leave Meeting</a>
+    </div>
+    <div id="meeting-container">
+        <!-- Jitsi iframe will be injected here -->
+    </div>
+    <script src="js/meeting.js"></script>
+</body>
+</html>

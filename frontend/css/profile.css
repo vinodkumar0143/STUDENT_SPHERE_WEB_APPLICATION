@@ -1,0 +1,239 @@
+/* ═══════════════════════════════════════════════════════════════
+   PROFILE PAGE — PREMIUM GLASSMORPHISM REDESIGN
+   Aesthetic: Deep Space / Neon-Atmospheric (Dark Mode Only)
+═══════════════════════════════════════════════════════════════ */
+
+/* --- DARK MODE FOUNDATION --- */
+.dark-mode.profile-page,
+.dark-mode .profile-page,
+.dark-mode body {
+    background: #050816 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Ambient Background Orbs */
+.dark-mode .profile-page::before {
+    content: '';
+    position: fixed;
+    top: -10%; left: -10%;
+    width: 60vw; height: 60vw;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+    filter: blur(100px);
+    z-index: -1;
+    pointer-events: none;
+    animation: drift 20s infinite alternate;
+}
+
+.dark-mode .profile-page::after {
+    content: '';
+    position: fixed;
+    bottom: -10%; right: -10%;
+    width: 50vw; height: 50vw;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, transparent 70%);
+    filter: blur(120px);
+    z-index: -1;
+    pointer-events: none;
+    animation: drift 25s infinite alternate-reverse;
+}
+
+@keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(10vw, 10vh) scale(1.1); }
+}
+
+/* --- MAIN CONTAINER --- */
+.dark-mode .profile-container {
+    padding-top: 4rem !important;
+    padding-bottom: 6rem !important;
+    perspective: 1000px;
+}
+
+/* --- GLASS CARD --- */
+.dark-mode .profile-card {
+    background: rgba(13, 18, 38, 0.7) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(160%) !important;
+    backdrop-filter: blur(25px) saturate(160%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 32px !important;
+    padding: 3.5rem !important;
+    box-shadow: 
+        15px 15px 40px rgba(0, 0, 0, 0.3),
+        inset 0 0 30px rgba(255, 255, 255, 0.02) !important;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1) !important;
+    animation: cardIn 1s cubic-bezier(0.23, 1, 0.32, 1) backwards;
+}
+
+@keyframes cardIn {
+    from { opacity: 0; transform: translateY(40px) rotateX(-5deg); }
+    to { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+
+.dark-mode .profile-card:hover {
+    transform: translateY(-10px);
+    border-color: transparent !important;
+    background: 
+        linear-gradient(rgba(13, 18, 38, 0.85), rgba(13, 18, 38, 0.85)) padding-box,
+        linear-gradient(270deg, #38bdf8, #6366f1, #f472b6, #38bdf8) border-box !important;
+    background-size: 300% 300% !important;
+    animation: border-shiny 4s linear infinite !important;
+    box-shadow: 
+        0 40px 100px rgba(0, 0, 0, 0.8),
+        0 0 50px rgba(99, 102, 241, 0.2),
+        0 0 100px rgba(56, 189, 248, 0.1) !important;
+}
+
+/* --- TYPOGRAPHY --- */
+.dark-mode .profile-header h2 {
+    font-size: 2.22rem !important;
+    font-weight: 900 !important;
+    letter-spacing: -1.5px !important;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    margin-bottom: 0.8rem !important;
+}
+
+.dark-mode .profile-header p {
+    color: #94a3b8 !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.2px !important;
+}
+
+.dark-mode .section-title {
+    font-size: 0.78rem !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2.5px !important;
+    color: #38bdf8 !important; /* Sky Blue */
+    border-bottom: 1px solid rgba(56, 189, 248, 0.2) !important;
+    padding-bottom: 0.8rem !important;
+    margin: 3rem 0 1.5rem 0 !important;
+    position: relative;
+}
+
+.dark-mode .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0;
+    width: 60px; height: 1px;
+    background: #38bdf8 !important;
+    box-shadow: 0 0 10px #38bdf8 !important;
+}
+
+/* --- FORM CONTROLS --- */
+.dark-mode label {
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    color: #cbd5e1 !important;
+    margin-bottom: 0.6rem !important;
+    display: block !important;
+}
+
+.dark-mode input,
+.dark-mode textarea {
+    background: rgba(13, 18, 38, 0.5) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+    border-top: 2px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 14px !important;
+    color: #f1f5f9 !important;
+    padding: 1rem 1.4rem !important;
+    font-size: 1rem !important;
+    font-family: inherit !important;
+    position: relative;
+    z-index: 1;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark-mode input:focus,
+.dark-mode textarea:focus {
+    background: rgba(13, 18, 38, 0.8) !important;
+    border-color: #38bdf8 !important;
+    box-shadow: 
+        0 0 0 4px rgba(56, 189, 248, 0.1),
+        0 0 20px rgba(56, 189, 248, 0.1) !important;
+    transform: translateY(-2px);
+    outline: none !important;
+}
+
+/* --- SHINY ANIMATED BORDERS ON HOVER --- */
+.dark-mode input:hover,
+.dark-mode textarea:hover {
+    border-color: transparent !important;
+    background: 
+        linear-gradient(rgba(13,18,38,0.7), rgba(13,18,38,0.7)) padding-box,
+        linear-gradient(270deg, #38bdf8, #6366f1, #f472b6, #38bdf8) border-box !important;
+    background-size: 300% auto !important;
+    animation: border-shiny 3s linear infinite !important;
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3), 0 0 15px rgba(56,189,248,0.2) !important;
+}
+
+@keyframes border-shiny {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- PROFILE IMAGE PREVIEW --- */
+.dark-mode #imagePreview {
+    border: 3px solid #38bdf8 !important;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3) !important;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.dark-mode #imagePreview:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* --- SAVE BUTTON (CRYSTAL STYLE) --- */
+.dark-mode #saveProfileBtn {
+    background: linear-gradient(135deg, #38bdf8, #6366f1, #8b5cf6) !important;
+    background-size: 200% auto !important;
+    color: #fff !important;
+    padding: 1.4rem 3rem !important; /* Added more horizontal padding */
+    font-size: 1.15rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.5px !important;
+    border-radius: 18px !important;
+    border: none !important;
+    border-top: 2px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4) !important;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    cursor: pointer !important;
+    margin-top: 2.5rem !important;
+    min-width: 320px !important; /* Professional fixed minimum width */
+    animation: gradientFlow 4s linear infinite !important;
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.dark-mode #saveProfileBtn:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 
+        0 20px 50px rgba(99, 102, 241, 0.6),
+        0 0 30px rgba(56, 189, 248, 0.4) !important;
+    filter: brightness(1.1);
+}
+
+.dark-mode #saveProfileBtn:active {
+    transform: translateY(2px) scale(0.98);
+}
+
+/* --- RESPONSIVE FIXES --- */
+@media (max-width: 600px) {
+    .dark-mode [style*="display: flex"] {
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+    }
+    .dark-mode .profile-card {
+        padding: 2rem !important;
+    }
+}

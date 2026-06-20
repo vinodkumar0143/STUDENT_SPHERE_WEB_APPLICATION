@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Sphere - Login / Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-page">
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="Student Sphere Logo" class="logo-img" loading="lazy">
+                <span class="logo-brand-text">Student Sphere</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="auth-wrapper">
+        <div class="auth-container">
+            <div class="logo-login-wrap">
+                <img src="assets/logo.png" alt="Student Sphere Logo" class="logo-img-login" loading="lazy">
+            </div>
+            <h2>Welcome to Student Sphere</h2>
+            
+            <div id="alert-message" class="alert hidden"></div>
+            
+            <form id="auth-form" class="auth-form">
+                <div class="form-group" id="name-group">
+                    <label for="name">Full Name <small class="note-text">(Only required for Registration)</small></label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required />
+                        <span id="toggle-password" class="toggle-password" title="Show/Hide Password">👁️</span>
+                    </div>
+                </div>
+                <div class="forgot-link-wrapper">
+                    <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
+                </div>
+                <div class="button-group">
+                    <button type="button" id="login-btn" class="btn btn-primary">Login</button>
+                    <button type="button" id="register-btn" class="btn btn-secondary">Register</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+</body>
+</html>
