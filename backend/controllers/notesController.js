@@ -45,8 +45,8 @@ const createNote = async (req, res) => {
 // @access  Private
 const getNotes = async (req, res) => {
     try {
-        // Enforces retrieving all Notes globally with populated creator names
-        const notes = await Note.find().populate('userId', 'name email').sort({ createdAt: -1 });
+        // Enforces retrieving solely the logged-in user's personal notes
+        const notes = await Note.find({ userId: req.user.id }).populate('userId', 'name email').sort({ createdAt: -1 });
         
         res.status(200).json(notes);
     } catch (error) {
@@ -55,15 +55,15 @@ const getNotes = async (req, res) => {
     }
 };
 
-// @desc    Filter through all notes globally
+// @desc    Filter through the user's personal notes
 // @route   GET /api/notes/filter
 // @access  Private
 const filterNotes = async (req, res) => {
     try {
         const { subject, semester } = req.query;
         
-        // Base query targeting all notes
-        let query = {};
+        // Base query targeting only the logged-in user's notes
+        let query = { userId: req.user.id };
 
         // Process conditional URL queries seamlessly 
         if (subject) query.subject = subject;

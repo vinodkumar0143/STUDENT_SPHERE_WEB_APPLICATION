@@ -13,6 +13,29 @@ const getApiUrl = (path) => {
     return `https://student-sphere-backend-46o4.onrender.com${path}`;
 };
 
+// Add dynamic styles for uploading note card
+const style = document.createElement('style');
+style.textContent = `
+    .note-uploading {
+        opacity: 0.8;
+        border: 2px dashed #6366f1 !important;
+        animation: pulseUploading 1.5s infinite ease-in-out;
+        position: relative;
+    }
+    @keyframes pulseUploading {
+        0% { opacity: 0.55; transform: scale(0.99); }
+        50% { opacity: 0.85; transform: scale(1.0); }
+        100% { opacity: 0.55; transform: scale(0.99); }
+    }
+    .uploading-text {
+        font-size: 0.8rem;
+        color: #6366f1;
+        font-weight: 600;
+        font-style: italic;
+    }
+`;
+document.head.appendChild(style);
+
 document.addEventListener('DOMContentLoaded', () => {
     // Select deeply integrated UI Elements
     const addNoteForm = document.getElementById('add-note-form');
@@ -25,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterSemester = document.getElementById('filter-semester');
     const applyFiltersBtn = document.getElementById('apply-filters-btn');
     const clearFiltersBtn = document.getElementById('clear-filters-btn');
+
+    // Local state to store loaded notes for instant updates
+    let localNotes = [];
 
     // 1. ADVANCED AUTH PROTECTION (MANDATORY)
     const checkAuth = () => {
@@ -48,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => notesAlert.classList.add('hidden'), 4000);
     };
 
-    // 2. ADD NOTE ARCHITECTURE
+    // 2. ADD NOTE ARCHITECTURE (Optimistic UI Update)
     const addNote = async (e) => {
         e.preventDefault(); // Stop standard form refresh
 
@@ -70,14 +96,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Disable button & inputs to prevent double submission and show loader
-        const submitBtn = addNoteForm.querySelector('button[type="submit"]');
-        const inputs = addNoteForm.querySelectorAll('input, select, button');
-        const originalBtnText = submitBtn.innerHTML;
-        
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = 'Uploading Note... ⏳';
-        inputs.forEach(input => input.setAttribute('disabled', 'true'));
+        // Generate temporary ID and tempNote for immediate rendering
+        const tempId = 'temp-' + Date.now();
+        const tempNote = {
+            _id: tempId,
+            title,
+            subject,
+            semester,
+            createdAt: new Date().toISOString(),
+            userId: {
+                _id: localStorage.getItem('userId') || 'current',
+                name: localStorage.getItem('userName') || 'Student'
+            },
+            isUploading: true
+        };
+
+        // Instantly prepend the temporary note to localNotes and render the grid
+        localNotes = [tempNote, ...localNotes];
+        renderNotes(localNotes);
+
+        // Instantly clear the form so the user can add another note immediately
+        addNoteForm.reset();
 
         // Format purely utilizing FormData API overriding strictly explicit JSON enabling binary integration purely natively
         const formData = new FormData();
@@ -93,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(getApiUrl('/api/notes'), {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}` // JWT Secure Transmission (Browser handles Content-Type boundaries natively)
+                    'Authorization': `Bearer ${token}` // JWT Secure Transmission
                 },
                 body: formData
             });
@@ -102,19 +141,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 showMessage('Note successfully added!');
-                addNoteForm.reset(); // Purge inputs after success
-                fetchNotes(); // Auto-refresh notes to cleanly reflect newest addition
+                // Replace the temporary optimistic note with the actual note returned by the database
+                localNotes = localNotes.map(note => note._id === tempId ? data.note : note);
+                renderNotes(localNotes);
             } else {
                 showMessage(data.message || 'Error occurred while saving note.', true);
+                // Remove the optimistic note on failure
+                localNotes = localNotes.filter(note => note._id !== tempId);
+                renderNotes(localNotes);
             }
         } catch (error) {
             console.error('Add note Error: ', error);
             showMessage('Server connection failed.', true);
-        } finally {
-            // Re-enable form elements
-            inputs.forEach(input => input.removeAttribute('disabled'));
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnText;
+            // Remove the optimistic note on failure
+            localNotes = localNotes.filter(note => note._id !== tempId);
+            renderNotes(localNotes);
         }
     };
 
@@ -138,7 +179,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const notes = await response.json();
             
             if (response.ok) {
-                renderNotes(notes);
+                localNotes = notes;
+                renderNotes(localNotes);
             } else {
                 showMessage(notes.message || 'Failed to fetch notes.', true);
             }
@@ -169,7 +211,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const filteredNotes = await response.json();
             
             if (response.ok) {
-                renderNotes(filteredNotes);
+                localNotes = filteredNotes;
+                renderNotes(localNotes);
                 if (filteredNotes.length === 0) showMessage('No notes matched your exact filters.', true);
             } else {
                 showMessage('Failed to properly filter notes.', true);
@@ -192,14 +235,15 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (response.ok) {
                 showMessage('Note successfully removed.');
-                // Optimize: Remove element functionally without duplicate duplicate API fetch
+                // Update local state and remove element functionally without duplicate API fetch
+                localNotes = localNotes.filter(note => note._id !== noteId);
                 if (cardElement) {
                     cardElement.remove();
                 } else {
-                    fetchNotes(); // Fallback
+                    renderNotes(localNotes); // Fallback
                 }
                 
-                if (notesGrid.children.length === 0) {
+                if (localNotes.length === 0) {
                     notesGrid.innerHTML = `<div class="empty-state">No notes found! Build your repository by adding one on the left.</div>`;
                 }
             } else {
@@ -221,12 +265,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Auto-generate heavily aesthetic HTML architecture for each note node isolated from MongoDB
+        // Auto-generate heavily aesthetic HTML architecture for each note node
         const currentUserId = localStorage.getItem('userId');
 
         notesArray.forEach(note => {
             const card = document.createElement('div');
-            card.className = 'note-card';
+            card.className = `note-card ${note.isUploading ? 'note-uploading' : ''}`;
             
             // Handle populated userId object or plain ID string robustly
             const uploaderId = note.userId && typeof note.userId === 'object' ? note.userId._id : note.userId;
@@ -242,11 +286,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="note-uploader">By ${uploaderName}</span>
                     </div>
                     <div class="note-actions">
-                        ${note.pdfLink ? `
+                        ${note.isUploading ? `
+                            <span class="uploading-text">Uploading to server... ⏳</span>
+                        ` : (note.pdfLink ? `
                             <a href="${note.pdfLink}" target="_blank" class="btn btn-mini btn-view">View</a>
                             <button type="button" onclick="downloadPdf('${note.pdfLink}')" class="btn btn-mini btn-download">Download</button>
-                        ` : '<span class="no-pdf">No PDF Attached</span>'}
-                        ${uploaderId === currentUserId ? `
+                        ` : '<span class="no-pdf">No PDF Attached</span>')}
+                        ${!note.isUploading && uploaderId === currentUserId ? `
                             <button class="btn btn-mini btn-danger delete-btn" data-id="${note._id}">Delete</button>
                         ` : ''}
                     </div>
