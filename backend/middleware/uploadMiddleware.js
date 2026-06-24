@@ -10,7 +10,7 @@ if (!fs.existsSync(uploadDir)) {
 
 const storage = multer.diskStorage({
     destination(req, file, cb) {
-        cb(null, 'uploads/');
+        cb(null, uploadDir);
     },
     filename(req, file, cb) {
         // req.user is populated by authMiddleware running first

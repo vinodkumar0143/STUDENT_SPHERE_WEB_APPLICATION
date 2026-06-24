@@ -14,7 +14,11 @@ const createNote = async (req, res) => {
         // Connect physical server file path explicitly if explicitly attached
         let pdfLink = '';
         if (req.file) {
-            pdfLink = `https://student-sphere-backend-46o4.onrender.com/uploads/${req.file.filename}`;
+            let protocol = req.protocol;
+            if (req.headers['x-forwarded-proto']) {
+                protocol = req.headers['x-forwarded-proto'];
+            }
+            pdfLink = `${protocol}://${req.get('host')}/uploads/${req.file.filename}`;
         }
 
         // Securely insert the note mapped strictly to the token-authenticated active user

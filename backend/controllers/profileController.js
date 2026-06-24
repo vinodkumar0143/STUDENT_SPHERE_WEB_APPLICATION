@@ -37,8 +37,12 @@ const createOrUpdateProfile = async (req, res) => {
         
         // Dynamic file resolving overriding original if user actively uploaded this session
         if (req.file) {
+            let protocol = req.protocol;
+            if (req.headers['x-forwarded-proto']) {
+                protocol = req.headers['x-forwarded-proto'];
+            }
             // Serve securely from local API hosted uploads directory 
-            profileFields.profileImage = `https://student-sphere-backend-46o4.onrender.com/uploads/${req.file.filename}`;
+            profileFields.profileImage = `${protocol}://${req.get('host')}/uploads/${req.file.filename}`;
         }
 
         // Check if a profile already exists strictly tied to this specific user ID

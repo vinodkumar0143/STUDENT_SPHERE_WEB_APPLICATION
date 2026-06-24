@@ -127,7 +127,19 @@ const forgotPassword = async (req, res) => {
         
         // Wait, the link should go to the FRONTEND reset page, not the backend API!
         // Assuming frontend is on http://127.0.0.1:5500
-        const frontendUrl = process.env.FRONTEND_URL || `${req.protocol}://${req.get('host')}`;
+        const requestHost = req.get('host');
+        let protocol = req.protocol;
+        if (req.headers['x-forwarded-proto']) {
+            protocol = req.headers['x-forwarded-proto'];
+        }
+        let frontendUrl = `${protocol}://${requestHost}`;
+
+        if (process.env.FRONTEND_URL) {
+            const envFrontendUrl = process.env.FRONTEND_URL;
+            if (!envFrontendUrl.includes('localhost') || requestHost.includes('localhost')) {
+                frontendUrl = envFrontendUrl;
+            }
+        }
         const resetPageUrl = `${frontendUrl}/frontend/reset-password.html?token=${resetToken}`;
 
         const message = `You are receiving this email because you (or someone else) have requested the reset of a password. Please make a POST request to: \n\n ${resetPageUrl}`;
