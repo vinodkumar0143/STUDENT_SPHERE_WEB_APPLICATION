@@ -16,14 +16,15 @@ const authMiddleware = async (req, res, next) => {
             req.user = { id: decoded.userId };
 
             next();
+            return;
         } catch (error) {
             console.error('Secure Middleware JWT Error:', error);
-            res.status(401).json({ message: 'Not authorized, token failed or expired' });
+            return res.status(401).json({ message: 'Not authorized, token failed or expired' });
         }
     }
 
     if (!token) {
-        res.status(401).json({ message: 'Not authorized, no securely provided token' });
+        return res.status(401).json({ message: 'Not authorized, no securely provided token' });
     }
 };
 

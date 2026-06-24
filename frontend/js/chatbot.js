@@ -3,6 +3,21 @@
  * Handles the dynamic UI, model interactions, and message rendering
  */
 
+// Helper to get API URL based on environment (local vs production)
+const getApiUrl = (path) => {
+    const origin = window.location.origin;
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return origin.includes(':5000') ? path : `http://localhost:5000${path}`;
+    }
+    if (window.location.protocol === 'file:') {
+        return `http://localhost:5000${path}`;
+    }
+    if (origin.includes('onrender.com')) {
+        return path;
+    }
+    return `https://student-sphere-backend-46o4.onrender.com${path}`;
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Create Bot UI Elements Dynamically (So it's on every page)
     const botHTML = `
@@ -62,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         appendMessage('bot', 'Thinking...', thinkingId);
 
         try {
-            const response = await fetch('https://student-sphere-backend-46o4.onrender.com/api/ai/chat', {
+            const response = await fetch(getApiUrl('/api/ai/chat'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: text })

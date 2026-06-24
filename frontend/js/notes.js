@@ -1,3 +1,18 @@
+// Helper to get API URL based on environment (local vs production)
+const getApiUrl = (path) => {
+    const origin = window.location.origin;
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return origin.includes(':5000') ? path : `http://localhost:5000${path}`;
+    }
+    if (window.location.protocol === 'file:') {
+        return `http://localhost:5000${path}`;
+    }
+    if (origin.includes('onrender.com')) {
+        return path;
+    }
+    return `https://student-sphere-backend-46o4.onrender.com${path}`;
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // Select deeply integrated UI Elements
     const addNoteForm = document.getElementById('add-note-form');
@@ -75,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Initiate authenticated POST operation mapped specifically to the backend
-            const response = await fetch('https://student-sphere-backend-46o4.onrender.com/api/notes', {
+            const response = await fetch(getApiUrl('/api/notes'), {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}` // JWT Secure Transmission (Browser handles Content-Type boundaries natively)
@@ -106,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. FETCH ISOLATED NOTES
     const fetchNotes = async () => {
         try {
-            const response = await fetch('https://student-sphere-backend-46o4.onrender.com/api/notes', {
+            const response = await fetch(getApiUrl('/api/notes'), {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -144,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (semester) queryParams.append('semester', semester);
 
         try {
-            const response = await fetch(`https://student-sphere-backend-46o4.onrender.com/api/notes/filter?${queryParams.toString()}`, {
+            const response = await fetch(getApiUrl(`/api/notes/filter?${queryParams.toString()}`), {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -168,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5.5 DELETE NOTE FUNCTIONALITY
     const deleteNoteEvent = async (noteId, cardElement) => {
         try {
-            const response = await fetch(`https://student-sphere-backend-46o4.onrender.com/api/notes/${noteId}`, {
+            const response = await fetch(getApiUrl(`/api/notes/${noteId}`), {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

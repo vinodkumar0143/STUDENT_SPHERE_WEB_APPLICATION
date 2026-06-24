@@ -1,4 +1,19 @@
 // Wait for DOM to load
+// Helper to get API URL based on environment (local vs production)
+const getApiUrl = (path) => {
+    const origin = window.location.origin;
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return origin.includes(':5000') ? path : `http://localhost:5000${path}`;
+    }
+    if (window.location.protocol === 'file:') {
+        return `http://localhost:5000${path}`;
+    }
+    if (origin.includes('onrender.com')) {
+        return path;
+    }
+    return `https://student-sphere-backend-46o4.onrender.com${path}`;
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- AUTHENTICATION PROTECTION & SESSION HANDLING ---
     const checkAuth = () => {
@@ -30,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Sync user name from backend
-            fetch('https://student-sphere-backend-46o4.onrender.com/api/auth/me', {
+            fetch(getApiUrl('/api/auth/me'), {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -120,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Send POST request to backend API
-            const response = await fetch('https://student-sphere-backend-46o4.onrender.com/api/auth/register', {
+            const response = await fetch(getApiUrl('/api/auth/register'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -159,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Send POST request to backend API
-            const response = await fetch('https://student-sphere-backend-46o4.onrender.com/api/auth/login', {
+            const response = await fetch(getApiUrl('/api/auth/login'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -204,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('https://student-sphere-backend-46o4.onrender.com/api/auth/forgot-password', {
+            const response = await fetch(getApiUrl('/api/auth/forgot-password'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),
@@ -263,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch(`https://student-sphere-backend-46o4.onrender.com/api/auth/reset-password/${token}`, {
+            const response = await fetch(getApiUrl(`/api/auth/reset-password/${token}`), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: newPassword }),

@@ -1,8 +1,23 @@
 // Community functionality scripts
 
+// Helper to get API URL based on environment (local vs production)
+const getApiUrl = (path) => {
+    const origin = window.location.origin;
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return origin.includes(':5000') ? path : `http://localhost:5000${path}`;
+    }
+    if (window.location.protocol === 'file:') {
+        return `http://localhost:5000${path}`;
+    }
+    if (origin.includes('onrender.com')) {
+        return path;
+    }
+    return `https://student-sphere-backend-46o4.onrender.com${path}`;
+};
+
 // 1. AUTH PROTECTION
 const token = localStorage.getItem('token');
-const API_BASE_URL = 'https://student-sphere-backend-46o4.onrender.com/api/posts';
+const API_BASE_URL = getApiUrl('/api/posts');
 
 function checkAuth() {
     if (!token) {

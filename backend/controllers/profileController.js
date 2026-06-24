@@ -5,7 +5,7 @@ const Profile = require('../models/Profile');
 // @access  Private
 const createOrUpdateProfile = async (req, res) => {
     try {
-        const { name, college, branch, skills, bio, phone, linkedin, github, age } = req.body;
+        const { name, college, branch, skills, bio, phone, linkedin, github, age, schooling, intermediate, extraProjects, experience, certifications, achievements, extracurricular } = req.body;
 
         if (!name || !college || !branch) {
             return res.status(400).json({ message: 'Name, college, and branch are required fields.' });
@@ -32,7 +32,14 @@ const createOrUpdateProfile = async (req, res) => {
             phone: phone || '',
             linkedin: linkedin || '',
             github: github || '',
-            age: age ? parseInt(age) : null
+            age: age ? parseInt(age) : null,
+            schooling: schooling || '',
+            intermediate: intermediate || '',
+            extraProjects: extraProjects || '',
+            experience: experience || '',
+            certifications: certifications || '',
+            achievements: achievements || '',
+            extracurricular: extracurricular || ''
         };
         
         // Dynamic file resolving overriding original if user actively uploaded this session

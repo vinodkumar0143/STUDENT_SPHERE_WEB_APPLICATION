@@ -1,8 +1,23 @@
 // Profile Functionality Scripts
 
+// Helper to get API URL based on environment (local vs production)
+const getApiUrl = (path) => {
+    const origin = window.location.origin;
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return origin.includes(':5000') ? path : `http://localhost:5000${path}`;
+    }
+    if (window.location.protocol === 'file:') {
+        return `http://localhost:5000${path}`;
+    }
+    if (origin.includes('onrender.com')) {
+        return path;
+    }
+    return `https://student-sphere-backend-46o4.onrender.com${path}`;
+};
+
 // 1. AUTH PROTECTION
 const token = localStorage.getItem('token');
-const API_BASE_URL = 'https://student-sphere-backend-46o4.onrender.com/api/profile';
+const API_BASE_URL = getApiUrl('/api/profile');
 
 function checkAuth() {
     if (!token) {
@@ -76,22 +91,34 @@ async function loadProfile() {
                 document.getElementById('skills').value = profileData.skills.join(', ');
             }
 
-            // Load additional resume details from localStorage
+            // Load additional resume details from database
+            document.getElementById('schooling').value = profileData.schooling || '';
+            document.getElementById('intermediate').value = profileData.intermediate || '';
+            document.getElementById('extraProjects').value = profileData.extraProjects || '';
+            document.getElementById('experience').value = profileData.experience || '';
+            document.getElementById('certifications').value = profileData.certifications || '';
+            document.getElementById('achievements').value = profileData.achievements || '';
+            document.getElementById('extracurricular').value = profileData.extracurricular || '';
+
+            // Fallback: If DB fields are empty, load from localStorage if present (migration path)
             const userId = profileData.userId?._id || localStorage.getItem('userId');
             if (userId) {
-                const extraDataString = localStorage.getItem(`profile_extra_${userId}`);
-                if (extraDataString) {
-                    try {
-                        const extraData = JSON.parse(extraDataString);
-                        document.getElementById('schooling').value = extraData.schooling || '';
-                        document.getElementById('intermediate').value = extraData.intermediate || '';
-                        document.getElementById('extraProjects').value = extraData.extraProjects || '';
-                        document.getElementById('experience').value = extraData.experience || '';
-                        document.getElementById('certifications').value = extraData.certifications || '';
-                        document.getElementById('achievements').value = extraData.achievements || '';
-                        document.getElementById('extracurricular').value = extraData.extracurricular || '';
-                    } catch (e) {
-                        console.error('Error parsing extra resume details:', e);
+                const needsLocalStorageFallback = !profileData.schooling && !profileData.intermediate && !profileData.extraProjects && !profileData.experience && !profileData.certifications && !profileData.achievements && !profileData.extracurricular;
+                if (needsLocalStorageFallback) {
+                    const extraDataString = localStorage.getItem(`profile_extra_${userId}`);
+                    if (extraDataString) {
+                        try {
+                            const extraData = JSON.parse(extraDataString);
+                            document.getElementById('schooling').value = extraData.schooling || '';
+                            document.getElementById('intermediate').value = extraData.intermediate || '';
+                            document.getElementById('extraProjects').value = extraData.extraProjects || '';
+                            document.getElementById('experience').value = extraData.experience || '';
+                            document.getElementById('certifications').value = extraData.certifications || '';
+                            document.getElementById('achievements').value = extraData.achievements || '';
+                            document.getElementById('extracurricular').value = extraData.extracurricular || '';
+                        } catch (e) {
+                            console.error('Error parsing extra resume details:', e);
+                        }
                     }
                 }
             }
@@ -131,6 +158,15 @@ async function saveProfile(e) {
     formData.append('bio', document.getElementById('bio').value.trim());
     formData.append('skills', document.getElementById('skills').value.trim());
 
+    // Append the additional resume fields to the database payload
+    formData.append('schooling', document.getElementById('schooling').value.trim());
+    formData.append('intermediate', document.getElementById('intermediate').value.trim());
+    formData.append('extraProjects', document.getElementById('extraProjects').value.trim());
+    formData.append('experience', document.getElementById('experience').value.trim());
+    formData.append('certifications', document.getElementById('certifications').value.trim());
+    formData.append('achievements', document.getElementById('achievements').value.trim());
+    formData.append('extracurricular', document.getElementById('extracurricular').value.trim());
+
     // Attach image file if user chose one
     const fileInput = document.getElementById('profileImage');
     if (fileInput && fileInput.files.length > 0) {
@@ -155,7 +191,7 @@ async function saveProfile(e) {
             // SUCCESS — show green message
             showAlert('✅ Profile updated! Changes are live on the server.');
             
-            // Save additional optional resume details to localStorage
+            // Also keep local storage synchronized
             const userId = data.profile?.userId || localStorage.getItem('userId');
             if (userId) {
                 const extraData = {
@@ -233,5 +269,3 @@ const linkedinEl = document.getElementById('linkedin');
 const githubEl = document.getElementById('github');
 if (linkedinEl) linkedinEl.addEventListener('blur', autoFormatUrlInput);
 if (githubEl) githubEl.addEventListener('blur', autoFormatUrlInput);
-
-

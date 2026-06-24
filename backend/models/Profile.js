@@ -45,6 +45,34 @@ const ProfileSchema = new mongoose.Schema({
     },
     age: {
         type: Number
+    },
+    schooling: {
+        type: String,
+        default: ''
+    },
+    intermediate: {
+        type: String,
+        default: ''
+    },
+    extraProjects: {
+        type: String,
+        default: ''
+    },
+    experience: {
+        type: String,
+        default: ''
+    },
+    certifications: {
+        type: String,
+        default: ''
+    },
+    achievements: {
+        type: String,
+        default: ''
+    },
+    extracurricular: {
+        type: String,
+        default: ''
     }
 }, { timestamps: true });
 
