@@ -17,7 +17,12 @@ app.use(cors());
 
 // Securely map local storage bucket for frontend fetching explicitly
 const path = require('path');
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const fs = require('fs');
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+app.use('/uploads', express.static(uploadsDir));
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 app.use('/frontend', express.static(path.join(__dirname, '..', 'frontend')));

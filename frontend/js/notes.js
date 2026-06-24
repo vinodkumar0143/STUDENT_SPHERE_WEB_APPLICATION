@@ -253,15 +253,23 @@ document.addEventListener('DOMContentLoaded', () => {
 globalThis.downloadPdf = async (url) => {
     try {
         const response = await fetch(url);
+        if (response.status === 404) {
+            alert('This note file could not be found on the server. Since Render uses ephemeral disk storage, files uploaded in older sessions are deleted when the server sleeps or restarts. Please upload the note again.');
+            return;
+        }
         if (!response.ok) throw new Error('Network response was completely malformed');
         
         const blob = await response.blob();
         const blobUrl = globalThis.URL.createObjectURL(blob);
         
+        // Extract original filename from the URL path
+        const urlParts = url.split('/');
+        const originalFilename = urlParts[urlParts.length - 1] || 'StudentSphere_Note.pdf';
+        
         // Dynamically invoke an invisible native HTML tag executing secure native downloads manually
         const a = document.createElement('a');
         a.href = blobUrl;
-        a.download = 'StudentSphere_Note.pdf';
+        a.download = originalFilename;
         document.body.appendChild(a);
         a.click();
         a.remove(); // Safely clear DOM elements 
