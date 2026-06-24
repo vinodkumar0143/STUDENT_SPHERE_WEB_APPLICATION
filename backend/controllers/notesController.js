@@ -17,15 +17,15 @@ const createNote = async (req, res) => {
         let fileName = '';
 
         if (req.file) {
-            // Read physical server file path and convert it to Base64 to store in database
+            // Read physical server file path and convert it to Base64 asynchronously
             const filePath = req.file.path;
-            const fileBuffer = fs.readFileSync(filePath);
+            const fileBuffer = await fs.promises.readFile(filePath);
             fileData = fileBuffer.toString('base64');
             fileName = req.file.originalname;
 
-            // Delete temporary local file on backend disk instantly to save space
+            // Delete temporary local file on backend disk asynchronously to save space
             try {
-                fs.unlinkSync(filePath);
+                await fs.promises.unlink(filePath);
             } catch (err) {
                 console.error('Failed to clean up temp file:', err);
             }

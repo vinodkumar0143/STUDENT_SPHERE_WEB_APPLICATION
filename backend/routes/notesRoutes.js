@@ -40,7 +40,7 @@ const upload = multer({
 router.post('/', authMiddleware, upload.single('pdfFile'), createNote);
 router.get('/', authMiddleware, getNotes);
 router.get('/filter', authMiddleware, filterNotes);
-router.get('/:id/view', authMiddleware, viewNoteFile);
+router.get('/:id/view', viewNoteFile);
 router.delete('/:id', authMiddleware, deleteNote);
 
 module.exports = router;
