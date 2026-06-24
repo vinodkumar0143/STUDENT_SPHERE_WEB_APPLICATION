@@ -43,6 +43,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const semester = document.getElementById('semester').value;
         const pdfFile = document.getElementById('pdfFile').files[0];
 
+        // Client-side validations
+        if (pdfFile) {
+            if (pdfFile.type !== 'application/pdf') {
+                showMessage('Only PDF files are allowed.', true);
+                return;
+            }
+            if (pdfFile.size > 50 * 1024 * 1024) { // 50MB limit
+                showMessage('PDF file size must be less than 50MB.', true);
+                return;
+            }
+        }
+
+        // Disable button & inputs to prevent double submission and show loader
+        const submitBtn = addNoteForm.querySelector('button[type="submit"]');
+        const inputs = addNoteForm.querySelectorAll('input, select, button');
+        const originalBtnText = submitBtn.innerHTML;
+        
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Uploading Note... ⏳';
+        inputs.forEach(input => input.setAttribute('disabled', 'true'));
+
         // Format purely utilizing FormData API overriding strictly explicit JSON enabling binary integration purely natively
         const formData = new FormData();
         formData.append('title', title);
@@ -74,6 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Add note Error: ', error);
             showMessage('Server connection failed.', true);
+        } finally {
+            // Re-enable form elements
+            inputs.forEach(input => input.removeAttribute('disabled'));
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
         }
     };
 
