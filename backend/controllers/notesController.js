@@ -58,7 +58,7 @@ const createNote = async (req, res) => {
         });
     } catch (error) {
         console.error('Create note error:', error);
-        res.status(500).json({ message: 'Server error while creating note' });
+        res.status(500).json({ message: 'Server error while creating note', error: error.message, stack: error.stack });
     }
 };
 

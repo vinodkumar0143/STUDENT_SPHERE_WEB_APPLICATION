@@ -90,8 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 showMessage('Only PDF files are allowed.', true);
                 return;
             }
-            if (pdfFile.size > 50 * 1024 * 1024) { // 50MB limit
-                showMessage('PDF file size must be less than 50MB.', true);
+            if (pdfFile.size > 10 * 1024 * 1024) { // 10MB limit to fit MongoDB Atlas 16MB BSON limit after Base64 conversion
+                showMessage('PDF file size must be less than 10MB.', true);
                 return;
             }
         }
@@ -145,7 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 localNotes = localNotes.map(note => note._id === tempId ? data.note : note);
                 renderNotes(localNotes);
             } else {
-                showMessage(data.message || 'Error occurred while saving note.', true);
+                const errMsg = data.error || data.message || 'Error occurred while saving note.';
+                showMessage('❌ ' + errMsg, true);
                 // Remove the optimistic note on failure
                 localNotes = localNotes.filter(note => note._id !== tempId);
                 renderNotes(localNotes);

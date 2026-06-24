@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
 // Enforce specific security parameters explicitly allowing PDFs ONLY
 const upload = multer({
     storage,
-    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB cutoff Limit
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB cutoff Limit to fit MongoDB document constraints
     fileFilter: function(req, file, cb) {
         if(file.mimetype === 'application/pdf') {
             cb(null, true);
