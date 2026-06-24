@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showMessage('Only PDF files are allowed.', true);
                 return;
             }
-            if (pdfFile.size > 10 * 1024 * 1024) { // 10MB limit to fit MongoDB Atlas 16MB BSON limit after Base64 conversion
+            if (pdfFile.size > 10 * 1024 * 1024) { // 10MB limit
                 showMessage('PDF file size must be less than 10MB.', true);
                 return;
             }
@@ -115,35 +115,40 @@ document.addEventListener('DOMContentLoaded', () => {
         localNotes = [tempNote, ...localNotes];
         renderNotes(localNotes);
 
-        // Instantly clear the form so the user can add another note immediately
+        // Instantly clear the form so the uploader doesn't wait
         addNoteForm.reset();
 
-        // Format purely utilizing FormData API overriding strictly explicit JSON enabling binary integration purely natively
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('subject', subject);
-        formData.append('semester', semester);
-        if (pdfFile) {
-            formData.append('pdfFile', pdfFile);
-        }
-
         try {
-            // Initiate authenticated POST operation mapped specifically to the backend
+            // Initiate fast JSON post to create note metadata instantly (takes < 200ms)
             const response = await fetch(getApiUrl('/api/notes'), {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}` // JWT Secure Transmission
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
-                body: formData
+                body: JSON.stringify({ title, subject, semester })
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                showMessage('Note successfully added!');
-                // Replace the temporary optimistic note with the actual note returned by the database
-                localNotes = localNotes.map(note => note._id === tempId ? data.note : note);
-                renderNotes(localNotes);
+                const createdNote = data.note;
+                
+                if (pdfFile) {
+                    // Update note in list with the real ID, but keep isUploading = true
+                    createdNote.isUploading = true;
+                    localNotes = localNotes.map(note => note._id === tempId ? createdNote : note);
+                    renderNotes(localNotes);
+
+                    // Start background file upload (so the note itself is visible instantly)
+                    uploadFileInBackground(createdNote._id, pdfFile);
+                } else {
+                    // No PDF file selected, note is ready immediately!
+                    createdNote.isUploading = false;
+                    localNotes = localNotes.map(note => note._id === tempId ? createdNote : note);
+                    renderNotes(localNotes);
+                    showMessage('Note successfully added!');
+                }
             } else {
                 const errMsg = data.error || data.message || 'Error occurred while saving note.';
                 showMessage('❌ ' + errMsg, true);
@@ -157,6 +162,51 @@ document.addEventListener('DOMContentLoaded', () => {
             // Remove the optimistic note on failure
             localNotes = localNotes.filter(note => note._id !== tempId);
             renderNotes(localNotes);
+        }
+    };
+
+    // Background File Upload handler to prevent UI blocks
+    const uploadFileInBackground = async (noteId, file) => {
+        const formData = new FormData();
+        formData.append('pdfFile', file);
+
+        try {
+            const response = await fetch(getApiUrl(`/api/notes/${noteId}/upload`), {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const updatedNote = data.note;
+                updatedNote.isUploading = false;
+                localNotes = localNotes.map(note => note._id === noteId ? updatedNote : note);
+                renderNotes(localNotes);
+                showMessage(`✅ PDF uploaded for "${updatedNote.title}"!`);
+            } else {
+                localNotes = localNotes.map(note => {
+                    if (note._id === noteId) {
+                        return { ...note, isUploading: false, pdfLink: '' };
+                    }
+                    return note;
+                });
+                renderNotes(localNotes);
+                showMessage(`❌ PDF upload failed: ${data.message}`, true);
+            }
+        } catch (error) {
+            console.error('Background PDF upload error:', error);
+            localNotes = localNotes.map(note => {
+                if (note._id === noteId) {
+                    return { ...note, isUploading: false, pdfLink: '' };
+                }
+                return note;
+            });
+            renderNotes(localNotes);
+            showMessage('❌ PDF upload failed due to connection error.', true);
         }
     };
 
@@ -288,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="note-actions">
                         ${note.isUploading ? `
-                            <span class="uploading-text">Uploading to server... ⏳</span>
+                            <span class="uploading-text">Uploading PDF... ⏳</span>
                         ` : (note.pdfLink ? `
                             <a href="${note.pdfLink}" target="_blank" class="btn btn-mini btn-view">View</a>
                             <button type="button" onclick="downloadPdf('${note.pdfLink}')" class="btn btn-mini btn-download">Download</button>

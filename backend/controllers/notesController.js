@@ -1,7 +1,7 @@
 const Note = require('../models/Note');
 const fs = require('fs');
 
-// @desc    Create a new note mapped to specific user
+// @desc    Create a new note metadata mapped to specific user (instantly)
 // @route   POST /api/notes
 // @access  Private
 const createNote = async (req, res) => {
@@ -12,53 +12,79 @@ const createNote = async (req, res) => {
             return res.status(400).json({ message: 'Please add all required fields (title, subject, semester)' });
         }
 
-        let pdfLink = '';
-        let fileData = '';
-        let fileName = '';
-
-        if (req.file) {
-            // Read physical server file path and convert it to Base64 asynchronously
-            const filePath = req.file.path;
-            const fileBuffer = await fs.promises.readFile(filePath);
-            fileData = fileBuffer.toString('base64');
-            fileName = req.file.originalname;
-
-            // Delete temporary local file on backend disk asynchronously to save space
-            try {
-                await fs.promises.unlink(filePath);
-            } catch (err) {
-                console.error('Failed to clean up temp file:', err);
-            }
-        }
-
-        // Securely insert the note mapped strictly to the token-authenticated active user
+        // Create the Note document in the database with empty file fields initially
         const note = await Note.create({
             title,
             subject,
             semester,
-            fileData,
-            fileName,
+            fileData: '',
+            fileName: '',
+            pdfLink: '',
             userId: req.user.id
         });
 
-        // Generate the absolute URL to serve this file via the view endpoint
-        if (req.file) {
-            let protocol = req.protocol;
-            if (req.headers['x-forwarded-proto']) {
-                protocol = req.headers['x-forwarded-proto'];
-            }
-            pdfLink = `${protocol}://${req.get('host')}/api/notes/${note._id}/view`;
-            note.pdfLink = pdfLink;
-            await note.save();
-        }
-
         res.status(201).json({
-            message: "Note successfully created",
+            message: "Note metadata successfully created",
             note
         });
     } catch (error) {
         console.error('Create note error:', error);
-        res.status(500).json({ message: 'Server error while creating note', error: error.message, stack: error.stack });
+        res.status(500).json({ message: 'Server error while creating note', error: error.message });
+    }
+};
+
+// @desc    Upload note PDF file in the background and attach it to the note
+// @route   POST /api/notes/:id/upload
+// @access  Private
+const uploadNoteFile = async (req, res) => {
+    try {
+        const note = await Note.findById(req.params.id);
+        if (!note) {
+            return res.status(404).json({ message: 'Note not found' });
+        }
+
+        // Verify the logged-in user securely owns the note
+        if (note.userId.toString() !== req.user.id) {
+            return res.status(401).json({ message: 'Not authorized to upload files for this note' });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        // Read physical file and convert to Base64 asynchronously
+        const filePath = req.file.path;
+        const fileBuffer = await fs.promises.readFile(filePath);
+        const fileData = fileBuffer.toString('base64');
+        const fileName = req.file.originalname;
+
+        // Clean up temporary local file asynchronously to save space
+        try {
+            await fs.promises.unlink(filePath);
+        } catch (err) {
+            console.error('Failed to clean up temp file:', err);
+        }
+
+        // Generate absolute pdfLink
+        let protocol = req.protocol;
+        if (req.headers['x-forwarded-proto']) {
+            protocol = req.headers['x-forwarded-proto'];
+        }
+        const pdfLink = `${protocol}://${req.get('host')}/api/notes/${note._id}/view`;
+
+        // Save PDF data to Note document
+        note.fileData = fileData;
+        note.fileName = fileName;
+        note.pdfLink = pdfLink;
+        await note.save();
+
+        res.status(200).json({
+            message: "PDF successfully uploaded for note",
+            note
+        });
+    } catch (error) {
+        console.error('Upload note file error:', error);
+        res.status(500).json({ message: 'Server error while uploading PDF file', error: error.message });
     }
 };
 
@@ -152,5 +178,6 @@ module.exports = {
     getNotes,
     filterNotes,
     deleteNote,
-    viewNoteFile
+    viewNoteFile,
+    uploadNoteFile
 };

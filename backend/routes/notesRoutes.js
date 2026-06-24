@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const { createNote, getNotes, filterNotes, deleteNote, viewNoteFile } = require('../controllers/notesController');
+const { createNote, getNotes, filterNotes, deleteNote, viewNoteFile, uploadNoteFile } = require('../controllers/notesController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 const fs = require('fs');
@@ -36,8 +36,9 @@ const upload = multer({
     }
 });
 
-// Bind Multer middleware handling explicit multipart/form-data natively 
-router.post('/', authMiddleware, upload.single('pdfFile'), createNote);
+// Bind routes
+router.post('/', authMiddleware, createNote); // Fast JSON metadata creation
+router.post('/:id/upload', authMiddleware, upload.single('pdfFile'), uploadNoteFile); // Background PDF file upload
 router.get('/', authMiddleware, getNotes);
 router.get('/filter', authMiddleware, filterNotes);
 router.get('/:id/view', viewNoteFile);
