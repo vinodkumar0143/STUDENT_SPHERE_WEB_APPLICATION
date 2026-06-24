@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const { createNote, getNotes, filterNotes, deleteNote } = require('../controllers/notesController');
+const { createNote, getNotes, filterNotes, deleteNote, viewNoteFile } = require('../controllers/notesController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 const fs = require('fs');
@@ -40,6 +40,7 @@ const upload = multer({
 router.post('/', authMiddleware, upload.single('pdfFile'), createNote);
 router.get('/', authMiddleware, getNotes);
 router.get('/filter', authMiddleware, filterNotes);
+router.get('/:id/view', authMiddleware, viewNoteFile);
 router.delete('/:id', authMiddleware, deleteNote);
 
 module.exports = router;

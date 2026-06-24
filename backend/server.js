@@ -62,5 +62,9 @@ app.use((err, req, res, next) => {
 });
 
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
+    // If the request is for an API route or an uploads file, return a proper 404 instead of index.html
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
+        return res.status(404).json({ message: 'Requested API endpoint or resource was not found.' });
+    }
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
 });

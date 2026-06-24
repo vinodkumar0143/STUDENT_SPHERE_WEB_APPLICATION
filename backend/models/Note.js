@@ -17,6 +17,12 @@ const noteSchema = new mongoose.Schema(
         pdfLink: {
             type: String
         },
+        fileData: {
+            type: String // Base64 encoded file data
+        },
+        fileName: {
+            type: String // Original file name
+        },
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',

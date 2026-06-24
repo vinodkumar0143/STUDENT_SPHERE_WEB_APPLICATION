@@ -1,4 +1,5 @@
 const Note = require('../models/Note');
+const fs = require('fs');
 
 // @desc    Create a new note mapped to specific user
 // @route   POST /api/notes
@@ -11,14 +12,23 @@ const createNote = async (req, res) => {
             return res.status(400).json({ message: 'Please add all required fields (title, subject, semester)' });
         }
 
-        // Connect physical server file path explicitly if explicitly attached
         let pdfLink = '';
+        let fileData = '';
+        let fileName = '';
+
         if (req.file) {
-            let protocol = req.protocol;
-            if (req.headers['x-forwarded-proto']) {
-                protocol = req.headers['x-forwarded-proto'];
+            // Read physical server file path and convert it to Base64 to store in database
+            const filePath = req.file.path;
+            const fileBuffer = fs.readFileSync(filePath);
+            fileData = fileBuffer.toString('base64');
+            fileName = req.file.originalname;
+
+            // Delete temporary local file on backend disk instantly to save space
+            try {
+                fs.unlinkSync(filePath);
+            } catch (err) {
+                console.error('Failed to clean up temp file:', err);
             }
-            pdfLink = `${protocol}://${req.get('host')}/uploads/${req.file.filename}`;
         }
 
         // Securely insert the note mapped strictly to the token-authenticated active user
@@ -26,9 +36,21 @@ const createNote = async (req, res) => {
             title,
             subject,
             semester,
-            pdfLink,
+            fileData,
+            fileName,
             userId: req.user.id
         });
+
+        // Generate the absolute URL to serve this file via the view endpoint
+        if (req.file) {
+            let protocol = req.protocol;
+            if (req.headers['x-forwarded-proto']) {
+                protocol = req.headers['x-forwarded-proto'];
+            }
+            pdfLink = `${protocol}://${req.get('host')}/api/notes/${note._id}/view`;
+            note.pdfLink = pdfLink;
+            await note.save();
+        }
 
         res.status(201).json({
             message: "Note successfully created",
@@ -40,14 +62,12 @@ const createNote = async (req, res) => {
     }
 };
 
-// @desc    Get solely the logged-in user's personal notes 
+// @desc    Get all notes globally (so every user can see and download all notes)
 // @route   GET /api/notes
 // @access  Private
 const getNotes = async (req, res) => {
     try {
-        // Enforces retrieving solely the logged-in user's personal notes
-        const notes = await Note.find({ userId: req.user.id }).populate('userId', 'name email').sort({ createdAt: -1 });
-        
+        const notes = await Note.find().populate('userId', 'name email').sort({ createdAt: -1 });
         res.status(200).json(notes);
     } catch (error) {
         console.error('Get notes error:', error);
@@ -55,15 +75,15 @@ const getNotes = async (req, res) => {
     }
 };
 
-// @desc    Filter through the user's personal notes
+// @desc    Filter through all notes globally (so every user can filter all notes)
 // @route   GET /api/notes/filter
 // @access  Private
 const filterNotes = async (req, res) => {
     try {
         const { subject, semester } = req.query;
         
-        // Base query targeting only the logged-in user's notes
-        let query = { userId: req.user.id };
+        // Base query targeting all notes
+        let query = {};
 
         // Process conditional URL queries seamlessly 
         if (subject) query.subject = subject;
@@ -103,9 +123,34 @@ const deleteNote = async (req, res) => {
     }
 };
 
+// @desc    Serve the actual PDF file from the database directly
+// @route   GET /api/notes/:id/view
+// @access  Private
+const viewNoteFile = async (req, res) => {
+    try {
+        const note = await Note.findById(req.params.id);
+        if (!note || !note.fileData) {
+            return res.status(404).send('Note PDF file not found or has been deleted.');
+        }
+
+        // Decode Base64 string back to binary buffer
+        const fileBuffer = Buffer.from(note.fileData, 'base64');
+
+        // Set response headers to serve PDF natively in browser
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `inline; filename="${note.fileName || 'note.pdf'}"`);
+
+        res.send(fileBuffer);
+    } catch (error) {
+        console.error('Error viewing note file:', error);
+        res.status(500).send('Server error retrieving file.');
+    }
+};
+
 module.exports = {
     createNote,
     getNotes,
     filterNotes,
-    deleteNote
+    deleteNote,
+    viewNoteFile
 };
